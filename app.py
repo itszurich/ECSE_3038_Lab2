@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 app = FastAPI()
 
@@ -28,17 +28,23 @@ async def create_new_todo(todo_request:Request):
 
 fake_database = []
 @app.get("/todos/{item_id}")
-async def read_todo(list_id: int):
-    return fake_database[list_id]
+async def read_todo(item_id: int):
+    return fake_database[item_id]
 
 @app.patch("/todos/{item_id}")
 async def update_todo_by_id(item_id: int, request: Request):
     todo_update = await request.json()
-    # index= TODO[item_id]
-    # stored_data=TODO(**index)
-    # update_data=TODO.dict(exclude_unset=True)
     for todo in fake_database:
         if (todo["id"]==item_id):
             update_data=todo.update(todo_update)
     return update_data
 
+@app.delete("todos/{item_id}")
+async def delete_todo_by_id(item_id:int,request: Request):
+    todo_delete= await request.json()
+    for todo in fake_database:
+        if(todo["id"]==item_id):
+            fake_database.remove(todo)
+            raise HTTPException (status_code=200, detail="ok")
+    raise HTTPException(status_code=404, detail="not found")
+    
