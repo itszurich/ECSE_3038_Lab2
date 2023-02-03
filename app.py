@@ -1,6 +1,4 @@
 from fastapi import FastAPI, Request
-import uuid
-from itertools import izip, islice
 from fastapi.middleware.cors import CORSMiddleware
 app = FastAPI()
 
@@ -16,33 +14,24 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-#database_temp =[{
-#    "ID": {uuid.uuid1():int}
-#    "todo_Text": {:}
-#    "isDone":{}
-#}]
+@app.post("/todos")
+async def create_new_todo(todo_request:Request):
+    todo = await todo_request.json()
+    fake_database.append(todo)
+    return todo
+ 
 
-#@app.get("/todos")
-#async def root():
-#    return database_temp
-
-#@app.post("/todos")
-#async def update_todo_by_id(todo_request:Request):
-#    todo_dict = await todo_request.json()
-#    database_temp.append(todo_dict)
-#    return todo_dict 
-
-class TODO(BaseModel):
-    ID: Union[int,None]=None
-    todo_text: Union[str,None]=None
-    IsDone: bool
+#class TODO(BaseModel):
+#    ID: Union[int,None]=None
+#   todo_text: Union[str,None]=None
+#    IsDone: bool
 
 fake_database = []
-@app.get("/todos/{item_id}",response_model=TODO)
+@app.get("/todos/{item_id}")
 async def read_todo(list_id: int):
     return fake_database[list_id]
 
-@app.patch("/todos/{item_id}",response_model=TODO)
+@app.patch("/todos/{item_id}")
 async def update_todo_by_id(item_id: int, request: Request):
     todo_update = await request.json()
     # index= TODO[item_id]
