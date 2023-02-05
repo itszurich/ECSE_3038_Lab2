@@ -9,7 +9,7 @@ My top 5 pokemon are:
 -dragonite/ archen
 -absol because he's emo
 -munchlax
--tyranitar
+-rayquaza
 -riolu/ froakie
 
 no explanation needed
